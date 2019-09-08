@@ -58,7 +58,7 @@ class QuotesSpider(scrapy.Spider):
         data = response.css("#paging > ul.list-inline > li:last-child a::text")
         last_page = data.extract()
         last_page = int(last_page[0])
-        url = "https://seekingalpha.com/earnings/earnings-call-transcripts/%d" % (x)
+        url = "https://seekingalpha.com/earnings/earnings-call-transcripts/%d" % (n_page)
         yield scrapy.Request(url=url, callback=self.parse)
 
     # SAVE CONTENTS TO AN HTML FILE
@@ -69,7 +69,7 @@ class QuotesSpider(scrapy.Spider):
         url = url.path
         filename = data[0][:100]
         filename = filename.replace('<div class="sa-art article-width" id="a-body" itemprop="articleBody"><p class="p p1">', '')
-        filename = str(x)+' '+filename
+        filename = str(n_page)+' '+filename
         with open(path+filename, 'w') as f:
             f.write(data[0])
             f.close()
@@ -94,7 +94,7 @@ class QuotesSpider(scrapy.Spider):
 
 #################################
 
-def run_scraper(pageno):
+def run_scraper(n_page):
     url_list = []
     c = CrawlerProcess({
         'USER_AGENT': 'Mozilla/5.0',
